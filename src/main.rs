@@ -13,6 +13,7 @@ use std::time::Duration;
 struct Player {
     position: Point,
     sprite: Rect,
+    speed: i32,
 }
 
 fn render(
@@ -57,18 +58,11 @@ fn main() -> Result<(), String> {
     let mut event_pump = sdl_context.event_pump()?;
     let mut i = 0;
     let mut column = 0; let mut row = 0;
-    let mut players : [Player; 3] = [
+    let mut players : [Player; 1] = [
         Player {
             position: Point::new(-10, 55),
             sprite: Rect::new(0*26, 0*36, 26, 36),
-        },
-        Player {
-            position: Point::new( 30, 55),
-            sprite: Rect::new(5*26, 0*36, 26, 36),
-        },
-        Player {
-            position: Point::new( 50, 55),
-            sprite: Rect::new(2*26, 0*36, 26, 36),
+            speed: 5,
         },
     ];
     
@@ -79,6 +73,18 @@ fn main() -> Result<(), String> {
                 Event::Quit {..} |
                 Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
                     break 'running;
+                },
+                Event::KeyDown { keycode: Some(Keycode::Left), .. } => {
+                    players[0].position = players[0].position.offset(-players[0].speed, 0);
+                },
+                Event::KeyDown { keycode: Some(Keycode::Right), .. } => {
+                    players[0].position = players[0].position.offset(players[0].speed, 0);
+                },
+                Event::KeyDown { keycode: Some(Keycode::Up), .. } => {
+                    players[0].position = players[0].position.offset(0, -players[0].speed);
+                },
+                Event::KeyDown { keycode: Some(Keycode::Down), .. } => {
+                    players[0].position = players[0].position.offset(0, players[0].speed);
                 },
                 _ => {}
             }
