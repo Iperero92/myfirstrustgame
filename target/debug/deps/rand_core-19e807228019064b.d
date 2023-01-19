@@ -1,0 +1,11 @@
+/Users/ivanperezrodriguez/rust/myfirstrustgame/target/debug/deps/rand_core-19e807228019064b.rmeta: /Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/lib.rs /Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/error.rs /Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/block.rs /Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/impls.rs /Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/le.rs
+
+/Users/ivanperezrodriguez/rust/myfirstrustgame/target/debug/deps/librand_core-19e807228019064b.rlib: /Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/lib.rs /Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/error.rs /Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/block.rs /Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/impls.rs /Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/le.rs
+
+/Users/ivanperezrodriguez/rust/myfirstrustgame/target/debug/deps/rand_core-19e807228019064b.d: /Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/lib.rs /Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/error.rs /Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/block.rs /Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/impls.rs /Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/le.rs
+
+/Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/lib.rs:
+/Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/error.rs:
+/Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/block.rs:
+/Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/impls.rs:
+/Users/ivanperezrodriguez/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.4.2/src/le.rs:
