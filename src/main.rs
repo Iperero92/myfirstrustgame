@@ -19,7 +19,7 @@ fn render(
     canvas: &mut WindowCanvas,
     color: Color,
 	texture: &Texture,
-    player: &Player,
+    players: &[Player],
     ) -> Result<(),String>{
     canvas.set_draw_color(color);
     canvas.clear();
@@ -27,9 +27,12 @@ fn render(
     let (width, height) = canvas.output_size()?;
 
     // Treat the center of the screen as the (0, 0) coordinate
-    let screen_position = player.position + Point::new(width as i32 / 2, height as i32 / 2);
-    let screen_rect = Rect::from_center(screen_position, player.sprite.width(), player.sprite.height());
-    canvas.copy(texture, player.sprite, screen_rect)?;
+    for player in players
+    { 
+        let screen_position = player.position + Point::new(width as i32 / 2, height as i32 / 2);
+        let screen_rect = Rect::from_center(screen_position, player.sprite.width(), player.sprite.height());
+        canvas.copy(texture, player.sprite, screen_rect)?;
+    }
     
     canvas.present();
     
@@ -54,10 +57,20 @@ fn main() -> Result<(), String> {
     let mut event_pump = sdl_context.event_pump()?;
     let mut i = 0;
     let mut column = 0; let mut row = 0;
-    let mut player = Player {
-        position: Point::new(-30, 55),
-        sprite: Rect::new(column*26, row*36, 26, 36),
-    };
+    let mut players : [Player; 3] = [
+        Player {
+            position: Point::new(-10, 55),
+            sprite: Rect::new(0*26, 0*36, 26, 36),
+        },
+        Player {
+            position: Point::new( 30, 55),
+            sprite: Rect::new(5*26, 0*36, 26, 36),
+        },
+        Player {
+            position: Point::new( 50, 55),
+            sprite: Rect::new(2*26, 0*36, 26, 36),
+        },
+    ];
     
     'running: loop {
         //process input
@@ -76,7 +89,7 @@ fn main() -> Result<(), String> {
         
         //render
         //
-        render(&mut canvas, Color::RGB(i, 64, 255 - i),&texture,&player)?;
+        render(&mut canvas, Color::RGB(i, 64, 255 - i),&texture,&players)?;
         
         //time management
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
