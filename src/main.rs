@@ -8,8 +8,9 @@ use sdl2::rect::{Point, Rect};
 // "self" imports the "image" module itself as well as everything else we listed
 use sdl2::image::{self, LoadTexture, InitFlag};
 use std::time::Duration;
+use std::collections::VecDeque;
 
-const PLAYER_MOVEMENT_SPEED: i32 = 5;
+const PLAYER_MOVEMENT_SPEED: i32 = 1;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Direction {
@@ -25,6 +26,7 @@ struct Player {
     sprite: Rect,
     speed: i32,
     direction: Direction,
+    dirStack: VecDeque<Direction>
 }
 
 fn render(
@@ -96,6 +98,7 @@ fn main() -> Result<(), String> {
             sprite: Rect::new(0*26, 0*36, 26, 36),
             speed: 0,
             direction: Direction::Right,
+            dirStack: VecDeque::with_capacity(4),
         },
     ];
     
@@ -107,27 +110,38 @@ fn main() -> Result<(), String> {
                 Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
                     break 'running;
                 },
-                Event::KeyDown { keycode: Some(Keycode::Left), repeat: false, .. } => {
-                    players[0].speed = PLAYER_MOVEMENT_SPEED;
-                    players[0].direction = Direction::Left;
-                },
-                Event::KeyDown { keycode: Some(Keycode::Right), repeat: false, .. } => {
-                    players[0].speed = PLAYER_MOVEMENT_SPEED;
-                    players[0].direction = Direction::Right;
-                },
-                Event::KeyDown { keycode: Some(Keycode::Up), repeat: false, .. } => {
-                    players[0].speed = PLAYER_MOVEMENT_SPEED;
-                    players[0].direction = Direction::Up;
-                },
+                Event::KeyDown { keycode: Some(Keycode::Left), repeat: false, .. } |
+                Event::KeyDown { keycode: Some(Keycode::Right), repeat: false, .. } |
+                Event::KeyDown { keycode: Some(Keycode::Up), repeat: false, .. } |
                 Event::KeyDown { keycode: Some(Keycode::Down), repeat: false, .. } => {
-                    players[0].speed = PLAYER_MOVEMENT_SPEED;
-                    players[0].direction = Direction::Down;
+                    if let Event::KeyDown{keycode, ..} = event {
+                        players[0].speed = PLAYER_MOVEMENT_SPEED;
+                        players[0].direction = keycode_to_direction(keycode.unwrap()).unwrap();
+                        players[0].dirStack.push_back(players[0].direction);
+                    }
                 },
                 Event::KeyUp { keycode: Some(Keycode::Left), repeat: false, .. } |
                 Event::KeyUp { keycode: Some(Keycode::Right), repeat: false, .. } |
                 Event::KeyUp { keycode: Some(Keycode::Up), repeat: false, .. } |
                 Event::KeyUp { keycode: Some(Keycode::Down), repeat: false, .. } => {
-                    players[0].speed = 0;
+                    if let Event::KeyUp{keycode, ..} = event {
+                        let mut idx = 0;
+                        //Find lifted key
+                        for pos in players[0].dirStack.iter() {
+                           if pos ==  &keycode_to_direction(keycode.unwrap()).unwrap()   {
+                               break;
+                           }
+                           else {idx+=1;}
+                        }
+                        players[0].dirStack.remove(idx);//remove lifted key
+                        let x = players[0].dirStack.back();
+                        if x == None {
+                            players[0].speed = 0;
+                        }
+                        else {
+                            players[0].direction = *x.unwrap();
+                        }
+                    }
                 },
                 _ => {}
             }
@@ -146,4 +160,14 @@ fn main() -> Result<(), String> {
     }
     
     Ok(())
+}
+
+fn keycode_to_direction(keycode : Keycode) -> Option<Direction> {
+   match keycode    {
+       Keycode::Left    => Some(Direction::Left),
+       Keycode::Right   => Some(Direction::Right),
+       Keycode::Down    => Some(Direction::Down),
+       Keycode::Up      => Some(Direction::Up),
+       _ => None,
+   }
 }
