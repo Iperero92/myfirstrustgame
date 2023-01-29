@@ -115,9 +115,16 @@ fn main() -> Result<(), String> {
                 Event::KeyDown { keycode: Some(Keycode::Up), repeat: false, .. } |
                 Event::KeyDown { keycode: Some(Keycode::Down), repeat: false, .. } => {
                     if let Event::KeyDown{keycode, ..} = event {
-                        players[0].speed = PLAYER_MOVEMENT_SPEED;
-                        players[0].direction = keycode_to_direction(keycode.unwrap()).unwrap();
-                        players[0].dirStack.push_back(players[0].direction);
+                        let new_dir = keycode_to_direction(keycode.unwrap()).unwrap();
+                        let old_dir = players[0].direction;
+                        if (players[0].speed !=0) && directions_are_opposite(old_dir,new_dir){
+                            players[0].speed = 0;
+                        }
+                        else {
+                            players[0].speed = PLAYER_MOVEMENT_SPEED;
+                            players[0].direction = new_dir;
+                            players[0].dirStack.push_back(new_dir);
+                        }
                     }
                 },
                 Event::KeyUp { keycode: Some(Keycode::Left), repeat: false, .. } |
@@ -138,7 +145,7 @@ fn main() -> Result<(), String> {
                         if x == None {
                             players[0].speed = 0;
                         }
-                        else {
+                        else if players[0].speed != 0 {
                             players[0].direction = *x.unwrap();
                         }
                     }
@@ -170,4 +177,12 @@ fn keycode_to_direction(keycode : Keycode) -> Option<Direction> {
        Keycode::Up      => Some(Direction::Up),
        _ => None,
    }
+}
+
+fn directions_are_opposite(dir1:Direction, dir2:Direction) -> bool {
+    if (dir1 == Direction::Left) && (dir2 == Direction::Right) { return true } 
+    if (dir1 == Direction::Right) && (dir2 == Direction::Left) {return true}
+    if (dir1 == Direction::Up) && (dir2 == Direction::Down) {return true}
+    if (dir1 == Direction::Down) && (dir2 == Direction::Up) {return true}
+    false
 }
