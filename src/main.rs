@@ -10,7 +10,7 @@ use sdl2::image::{self, LoadTexture, InitFlag};
 use std::time::Duration;
 use std::collections::VecDeque;
 
-const PLAYER_MOVEMENT_SPEED: i32 = 1;
+const PLAYER_MOVEMENT_SPEED: i32 = 5;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Direction {
