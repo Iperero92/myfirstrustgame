@@ -27,6 +27,19 @@ struct Player {
     speed: i32,
     direction: Direction,
     dir_stack: VecDeque<Direction>,
+    current_frame: u32,
+}
+
+
+/// Returns the row of the spritesheet corresponding to the given direction
+fn direction_spritesheet_row(direction: Direction) -> u32 {
+    use self::Direction::*;
+    match direction {
+        Up => 3,
+        Down => 0,
+        Left => 1,
+        Right => 2,
+    }
 }
 
 fn render(
@@ -43,9 +56,16 @@ fn render(
     // Treat the center of the screen as the (0, 0) coordinate
     for player in players
     { 
+        let (frame_width, frame_height) = player.sprite.size();
+        let current_frame = Rect::new(
+        player.sprite.x() + frame_width as i32 * player.current_frame as i32,
+        player.sprite.y() + frame_height as  i32 * direction_spritesheet_row(player.direction) as i32,
+        frame_width,
+        frame_height,
+        );
         let screen_position = player.position + Point::new(width as i32 / 2, height as i32 / 2);
         let screen_rect = Rect::from_center(screen_position, player.sprite.width(), player.sprite.height());
-        canvas.copy(texture, player.sprite, screen_rect)?;
+        canvas.copy(texture, current_frame, screen_rect)?;
     }
     
     canvas.present();
@@ -72,6 +92,11 @@ fn update_player(player: &mut Player) {
             player.position = player.position.offset(0, player.speed);
         },
     }
+        // Only continue to animate if the player is moving
+    if player.speed != 0 {
+        // Cheat: using the fact that all animations are 3 frames (NOT extensible)
+        player.current_frame = (player.current_frame + 1) % 3;
+    }
 }
 
 fn main() -> Result<(), String> {
@@ -91,7 +116,6 @@ fn main() -> Result<(), String> {
     
     let mut event_pump = sdl_context.event_pump()?;
     let mut i = 0;
-    let mut column = 0; let mut row = 0;
     let mut players : [Player; 1] = [
         Player {
             position: Point::new(-10, 55),
@@ -99,6 +123,7 @@ fn main() -> Result<(), String> {
             speed: 0,
             direction: Direction::Right,
             dir_stack: VecDeque::with_capacity(4),
+            current_frame: 0,
         },
     ];
     
