@@ -26,7 +26,7 @@ struct Player {
     sprite: Rect,
     speed: i32,
     direction: Direction,
-    dirStack: VecDeque<Direction>
+    dir_stack: VecDeque<Direction>,
 }
 
 fn render(
@@ -98,7 +98,7 @@ fn main() -> Result<(), String> {
             sprite: Rect::new(0*26, 0*36, 26, 36),
             speed: 0,
             direction: Direction::Right,
-            dirStack: VecDeque::with_capacity(4),
+            dir_stack: VecDeque::with_capacity(4),
         },
     ];
     
@@ -123,7 +123,7 @@ fn main() -> Result<(), String> {
                         else {
                             players[0].speed = PLAYER_MOVEMENT_SPEED;
                             players[0].direction = new_dir;
-                            players[0].dirStack.push_back(new_dir);
+                            players[0].dir_stack.push_back(new_dir);
                         }
                     }
                 },
@@ -134,14 +134,14 @@ fn main() -> Result<(), String> {
                     if let Event::KeyUp{keycode, ..} = event {
                         let mut idx = 0;
                         //Find lifted key
-                        for pos in players[0].dirStack.iter() {
+                        for pos in players[0].dir_stack.iter() {
                            if pos ==  &keycode_to_direction(keycode.unwrap()).unwrap()   {
                                break;
                            }
                            else {idx+=1;}
                         }
-                        players[0].dirStack.remove(idx);//remove lifted key
-                        let x = players[0].dirStack.back();
+                        players[0].dir_stack.remove(idx);//remove lifted key
+                        let x = players[0].dir_stack.back();
                         if x == None {
                             players[0].speed = 0;
                         }
